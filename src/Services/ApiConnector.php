@@ -22,6 +22,7 @@ class ApiConnector {
     private static $instance;
 
 
+
     private function __construct(ApiServer $apiServer)
     {
         $this->ApiServer = $apiServer;

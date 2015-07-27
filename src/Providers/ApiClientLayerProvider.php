@@ -31,7 +31,7 @@ class ApiClientLayerProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('ApiConnector', function($app){
+        $this->app->singleton('Andersonef\ApiClientLayer\Services\ApiConnector', function($app){
             return ApiConnector::getInstance();
         });
     }
