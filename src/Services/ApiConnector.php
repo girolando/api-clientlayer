@@ -73,13 +73,19 @@ class ApiConnector {
                 throw new ApiConnectorException('Method '.$method.' not allowed');
                 break;
         }
-        return $return;
+        return $this->translate($return);
     }
 
 
+    protected function translate($token)
+    {
+        $trans = \JWT::decode($token, $this->ApiServer->getAppSecret());
+        return $trans;
+    }
+
     public function generateToken($payload, int $user = null)
     {
-        $tok = \JWT::encode($payload, $this->ApiServer->getAppSecret(), 'HS256', null, ['AppKey' => $this->ApiServer->getAppSecret()]);
+        $tok = \JWT::encode($payload, $this->ApiServer->getAppSecret(), 'HS256', null, ['AppKey' => $this->ApiServer->getAppKey()]);
         return $tok;
     }
 
