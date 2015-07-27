@@ -19,7 +19,8 @@ class ApiConnector {
 
     protected $ApiServer;
     protected $usertoken;
-    private $instance;
+    private static $instance;
+
 
     private function __construct(ApiServer $apiServer)
     {

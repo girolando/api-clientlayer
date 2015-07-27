@@ -8,7 +8,7 @@
 
 namespace Andersonef\ApiClientLayer\Providers;
 
-use Andersonef\ApiImplementation\Services\ApiConnector;
+use Andersonef\ApiClientLayer\Services\ApiConnector;
 use Illuminate\Support\ServiceProvider;
 
 class ApiClientLayerProvider extends ServiceProvider
@@ -22,6 +22,7 @@ class ApiClientLayerProvider extends ServiceProvider
     {
         //
     }
+
 
     /**
      * Register the application services.
