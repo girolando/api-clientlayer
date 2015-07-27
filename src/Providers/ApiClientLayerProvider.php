@@ -34,5 +34,8 @@ class ApiClientLayerProvider extends ServiceProvider
         $this->app->singleton('Andersonef\ApiClientLayer\Services\ApiConnector', function($app){
             return ApiConnector::getInstance();
         });
+
+
+        //cachorro
     }
 }
