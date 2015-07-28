@@ -58,6 +58,7 @@ class ApiConnector {
         switch($method){
             case 'GET':
                 $iurl = $curl->buildUrl($url, $param);
+
                 $return = $curl->get($iurl);
                 break;
             case 'POST':
