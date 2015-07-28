@@ -73,7 +73,8 @@ class ApiConnector {
                 throw new ApiConnectorException('Method '.$method.' not allowed');
                 break;
         }
-        return $this->translate($return);
+        if($return->statusCode != 200) return $return;
+        return $this->translate($return->body);
     }
 
 
