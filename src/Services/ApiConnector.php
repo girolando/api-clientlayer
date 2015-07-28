@@ -80,6 +80,7 @@ class ApiConnector {
 
     protected function translate($token)
     {
+
         $trans = \JWT::decode($token, $this->ApiServer->getAppSecret());
         return $trans;
     }
