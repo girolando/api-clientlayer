@@ -89,7 +89,9 @@ class ApiConnector {
 
     public function generateToken($payload, int $user = null)
     {
-        $tok = \JWT::encode($payload, $this->ApiServer->getAppSecret(), 'HS256', null, ['AppKey' => $this->ApiServer->getAppKey()]);
+        $header = ['AppKey' => $this->ApiServer->getAppKey()];
+        if($this->usertoken) $header['UserKey'] = $this->usertoken;
+        $tok = \JWT::encode($payload, $this->ApiServer->getAppSecret(), 'HS256', null, $header);
         return $tok;
     }
 
