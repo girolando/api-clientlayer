@@ -51,7 +51,6 @@ class ApiConnector {
         if($url{0} != '/') throw new ApiConnectorException('Your service url must begin with slash.');
         $response = null;
         $curl = new cURL();
-        $iurl = $curl->buildUrl($this->ApiServer->getEndpointUrl().$url);
         $param = $this->generateToken($parameters, Auth::user());
         $param = ['__token' => $param];
         $return = null;
