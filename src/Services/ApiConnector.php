@@ -82,6 +82,7 @@ class ApiConnector {
     {
 
         $trans = \JWT::decode($token, $this->ApiServer->getAppSecret(), ['HS256', 'HS384', 'ES256', 'RS384']);
+
         return $trans;
     }
 
