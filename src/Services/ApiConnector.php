@@ -54,10 +54,10 @@ class ApiConnector {
         $param = $this->generateToken($parameters, Auth::user());
         $param = ['__token' => $param];
         $return = null;
+        $url = $this->ApiServer->getEndpointUrl().$url;
         switch($method){
             case 'GET':
-                $iurl = $curl->buildUrl($this->ApiServer->getEndpointUrl().$url, $param);
-
+                $iurl = $curl->buildUrl($url, $param);
                 $return = $curl->get($iurl);
                 break;
             case 'POST':
