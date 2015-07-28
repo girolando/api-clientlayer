@@ -91,6 +91,7 @@ class ApiConnector {
     {
         $header = ['AppKey' => $this->ApiServer->getAppKey()];
         if($this->usertoken) $header['UserKey'] = $this->usertoken;
+
         $tok = \JWT::encode($payload, $this->ApiServer->getAppSecret(), 'HS256', null, $header);
         return $tok;
     }
