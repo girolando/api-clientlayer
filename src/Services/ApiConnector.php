@@ -55,25 +55,13 @@ class ApiConnector {
         $param = ['__token' => $param];
         $return = null;
         $url = $this->ApiServer->getEndpointUrl().$url;
-        switch($method){
-            case 'GET':
-                $iurl = $curl->buildUrl($url, $param);
-
-                $return = $curl->get($iurl);
-                break;
-            case 'POST':
-                $return = $curl->post($url, $param);
-                break;
-            case 'PUT':
-                $return = $curl->put($url, $param);
-                break;
-            case 'DELETE':
-                $return = $curl->delete($url, $param);
-                break;
-            default:
-                throw new ApiConnectorException('Method '.$method.' not allowed');
-                break;
+        $request = $curl->newRequest($method, $url, $param);
+        $request->setHeader('X-Requested-With', 'XMLHttpRequest');
+        if($method == 'GET'){
+            $iurl = $curl->buildUrl($url, $param);
+            $request->setUrl($iurl);
         }
+        $return = $request->send();
         if($return->statusCode != 200) return $return;
         return $this->translate($return->body);
     }
