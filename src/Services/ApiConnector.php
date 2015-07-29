@@ -81,9 +81,11 @@ class ApiConnector {
 
     protected function translate($token)
     {
-
-        $trans = \JWT::decode($token, $this->ApiServer->getAppSecret(), ['HS256', 'HS384', 'ES256', 'RS384']);
-
+        try{
+            $trans = \JWT::decode($token, $this->ApiServer->getAppSecret(), ['HS256', 'HS384', 'ES256', 'RS384']);
+        }catch(\Exception $e){
+            throw new ApiConnectorException('Não foi possível decodificar a resposta ('.$e->getMessage().'). Resposta pura: '.$token);
+        }
         return $trans;
     }
 
