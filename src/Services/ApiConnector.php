@@ -64,6 +64,7 @@ class ApiConnector {
         $return = $request->send();
         if($return->statusCode != 200) return $return;
         return $this->translate($return->body);
+
     }
 
 
