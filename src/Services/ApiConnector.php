@@ -57,13 +57,17 @@ class ApiConnector {
         $url = $this->ApiServer->getEndpointUrl().$url;
         $request = $curl->newRequest($method, $url, $param);
         $request->setHeader('X-Requested-With', 'XMLHttpRequest');
+        $request->setOption(CURLOPT_FOLLOWLOCATION, 1);
         if($method == 'GET'){
             $iurl = $curl->buildUrl($url, $param);
             $request->setUrl($iurl);
         }
         $return = $request->send();
-        if($return->statusCode != 200) return $return;
-        return $this->translate($return->body);
+        try {
+            return $this->translate($return->body);
+        }catch(\Exception $e){
+            return $return->body;
+        }
 
     }
 
