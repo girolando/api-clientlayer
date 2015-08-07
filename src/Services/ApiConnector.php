@@ -64,7 +64,9 @@ class ApiConnector {
         }
         $return = $request->send();
         try {
-            return $this->translate($return->body);
+            $ret = $this->translate($return->body);
+            $ret->response = $return;
+            return $ret;
         }catch(\Exception $e){
             return $return->body;
         }
