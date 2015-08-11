@@ -59,7 +59,8 @@ class ApiConnector {
         $request->setHeader('X-Requested-With', 'XMLHttpRequest');
         $request->setOption(CURLOPT_FOLLOWLOCATION, 1);
         if($method == 'GET'){
-            $iurl = $curl->buildUrl($url, $param);
+            $parameters['__token'] = $param['__token'];
+            $iurl = $curl->buildUrl($url, $parameters);
             $request->setUrl($iurl);
         }
         $return = $request->send();
@@ -104,7 +105,7 @@ class ApiConnector {
      * @return \anlutro\cURL\Response|null
      * @throws ApiConnectorException
      */
-    public function get($service)
+    public function get($service, array $parameters = [])
     {
         return $this->_request($service, 'GET');
     }
@@ -115,7 +116,7 @@ class ApiConnector {
      * @return \anlutro\cURL\Response|null
      * @throws ApiConnectorException
      */
-    public function post($service, $parameters = [])
+    public function post($service, array $parameters = [])
     {
         return $this->_request($service, 'POST', $parameters);
     }
@@ -126,7 +127,7 @@ class ApiConnector {
      * @return \anlutro\cURL\Response|null
      * @throws ApiConnectorException
      */
-    public function put($service, $parameters = [])
+    public function put($service, array $parameters = [])
     {
         return $this->_request($service, 'PUT', $parameters);
     }
@@ -137,7 +138,7 @@ class ApiConnector {
      * @return \anlutro\cURL\Response|null
      * @throws ApiConnectorException
      */
-    public function delete($service, $parameters = [])
+    public function delete($service, array $parameters = [])
     {
         return $this->_request($service, 'DELETE', $parameters);
     }
