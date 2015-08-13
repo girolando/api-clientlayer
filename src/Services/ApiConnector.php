@@ -34,9 +34,9 @@ class ApiConnector {
         {
             if(!$apiServer)
             {
-                if(!$appkey = env('API_APPKEY')) throw new ApiConnectorException('Invalid AppKey or API_APPKEY is not defined at .env file!');
-                if(!$appsecret = env('API_APPSECRET')) throw new ApiConnectorException('Invalid AppSecret or API_APPSECRET is not defined at .env file!');
-                if(!$url = env('API_ENDPOINTURL')) throw new ApiConnectorException('Invalid EndPointUrl or API_ENDPOINTURL is not defined at .env file!');
+                if(!$appkey = \Config::get('app.apiClientKey')) throw new ApiConnectorException('Invalid AppKey or API_APPKEY is not defined at .env file!');
+                if(!$appsecret = \Config::get('app.apiClientSecret')) throw new ApiConnectorException('Invalid AppSecret or API_APPSECRET is not defined at .env file!');
+                if(!$url = \Config::get('app.apiEndpointUrl')) throw new ApiConnectorException('Invalid EndPointUrl or API_ENDPOINTURL is not defined at .env file!');
                 if($url{strlen($url)-1} == '/') throw new ApiConnectorException('Your EndPoint Url should not end with slash.');
                 $apiServer = new ApiServer($appkey, $appsecret, $url);
             }
@@ -57,6 +57,7 @@ class ApiConnector {
         $url = $this->ApiServer->getEndpointUrl().$url;
         $request = $curl->newRequest($method, $url, $param);
         $request->setHeader('X-Requested-With', 'XMLHttpRequest');
+        $request->setHeader('language', \Config::get('app.locale'));
         $request->setOption(CURLOPT_FOLLOWLOCATION, 1);
         if($method == 'GET'){
             $parameters['__token'] = $param['__token'];
