@@ -58,6 +58,7 @@ class ApiConnector {
         $request = $curl->newRequest($method, $url, $param);
         $request->setHeader('X-Requested-With', 'XMLHttpRequest');
         $request->setHeader('language', \Config::get('app.locale'));
+
         $request->setOption(CURLOPT_FOLLOWLOCATION, 1);
         if($method == 'GET'){
             $parameters['__token'] = $param['__token'];
