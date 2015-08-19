@@ -60,7 +60,7 @@ class ApiConnector {
         $request->setHeader('language', \Config::get('app.locale'));
 
         $request->setOption(CURLOPT_FOLLOWLOCATION, 1);
-        if($method == 'GET'){
+        if($method == 'GET' || $method == 'DELETE'){
             $parameters['__token'] = $param['__token'];
             $iurl = $curl->buildUrl($url, $parameters);
             $request->setUrl($iurl);
