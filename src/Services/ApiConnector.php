@@ -109,7 +109,7 @@ class ApiConnector {
      */
     public function get($service, array $parameters = [])
     {
-        return $this->_request($service, 'GET');
+        return $this->_request($service, 'GET', $parameters);
     }
 
     /** Execute a POST request to the service url.
