@@ -81,6 +81,12 @@ class ApiConnector {
 
     }
 
+    /** Add a file to your server request.
+     * @param $path (must be the root path)
+     * @param $mimetype
+     * @param $inputName
+     * @throws ApiConnectorException
+     */
     public function addFile($path, $mimetype, $inputName)
     {
         if(!file_exists($path)) throw new ApiConnectorException('File '.$path.' not found!');
