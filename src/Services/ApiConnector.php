@@ -20,6 +20,7 @@ class ApiConnector {
     protected $ApiServer;
     protected $usertoken;
     private static $instance;
+    protected $files = [];
 
 
 
@@ -53,6 +54,10 @@ class ApiConnector {
         $curl = new cURL();
         $param = $this->generateToken($parameters, Auth::user());
         $param = ['__token' => $param];
+        foreach($this->files as $file){
+            $param[$file->getPostFilename()] = $file;
+        }
+
         $return = null;
         $url = $this->ApiServer->getEndpointUrl().$url;
         $request = $curl->newRequest($method, $url, $param);
@@ -74,6 +79,13 @@ class ApiConnector {
             return $return->body;
         }
 
+    }
+
+    public function addFile($path, $mimetype, $inputName)
+    {
+        if(!file_exists($path)) throw new ApiConnectorException('File '.$path.' not found!');
+        if($inputName == '__token') throw new ApiConnectorException('__name is a reserved word from ApiConnector class. Please use another inputName');
+        $this->files[] = new \CURLFile($path, $mimetype,$inputName);
     }
 
 
