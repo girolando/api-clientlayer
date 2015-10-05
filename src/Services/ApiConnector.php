@@ -86,12 +86,14 @@ class ApiConnector {
      * @param $mimetype
      * @param $inputName
      * @throws ApiConnectorException
+     * @return $this
      */
     public function addFile($path, $mimetype, $inputName)
     {
         if(!file_exists($path)) throw new ApiConnectorException('File '.$path.' not found!');
         if($inputName == '__token') throw new ApiConnectorException('__name is a reserved word from ApiConnector class. Please use another inputName');
         $this->files[] = new \CURLFile($path, $mimetype,$inputName);
+        return $this;
     }
 
 
