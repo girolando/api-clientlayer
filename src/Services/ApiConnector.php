@@ -96,6 +96,14 @@ class ApiConnector {
         return $this;
     }
 
+    /** Returns an array of CURLFile
+     * @return array
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
 
     protected function translate($token)
     {
