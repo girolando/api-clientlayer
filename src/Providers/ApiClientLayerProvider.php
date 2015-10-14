@@ -8,6 +8,7 @@
 
 namespace Andersonef\ApiClientLayer\Providers;
 
+use Andersonef\ApiClientLayer\Entities\Remote\ApiServer;
 use Andersonef\ApiClientLayer\Services\ApiConnector;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,9 +33,9 @@ class ApiClientLayerProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('Andersonef\ApiClientLayer\Services\ApiConnector', function($app){
-            if(!$appkey = \Config::get('app.apiClientKey')) throw new ApiConnectorException('Invalid AppKey or API_APPKEY is not defined at .env file!');
-            if(!$appsecret = \Config::get('app.apiClientSecret')) throw new ApiConnectorException('Invalid AppSecret or API_APPSECRET is not defined at .env file!');
-            if(!$url = \Config::get('app.apiEndpointUrl')) throw new ApiConnectorException('Invalid EndPointUrl or API_ENDPOINTURL is not defined at .env file!');
+            if(!$appkey = \Config::get('app.apiClientKey')) throw new ApiConnectorException('Invalid AppKey or apiClientKey config is not defined at config/app.php file!');
+            if(!$appsecret = \Config::get('app.apiClientSecret')) throw new ApiConnectorException('Invalid AppSecret or apiClientSecret config is not defined at config/app.php file!');
+            if(!$url = \Config::get('app.apiEndpointUrl')) throw new ApiConnectorException('Invalid EndPointUrl or apiEndpointUrl config is not defined at config/app.php file!');
             if($url{strlen($url)-1} == '/') throw new ApiConnectorException('Your EndPoint Url should not end with slash.');
             $apiServer = new ApiServer($appkey, $appsecret, $url);
             return ApiConnector::getInstance($apiServer);
