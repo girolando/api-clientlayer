@@ -29,18 +29,10 @@ class ApiConnector {
         $this->ApiServer = $apiServer;
     }
 
-    public static function getInstance($apiServer = null)
+    public static function getInstance($apiServer)
     {
         if(!self::$instance)
         {
-            if(!$apiServer)
-            {
-                if(!$appkey = \Config::get('app.apiClientKey')) throw new ApiConnectorException('Invalid AppKey or API_APPKEY is not defined at .env file!');
-                if(!$appsecret = \Config::get('app.apiClientSecret')) throw new ApiConnectorException('Invalid AppSecret or API_APPSECRET is not defined at .env file!');
-                if(!$url = \Config::get('app.apiEndpointUrl')) throw new ApiConnectorException('Invalid EndPointUrl or API_ENDPOINTURL is not defined at .env file!');
-                if($url{strlen($url)-1} == '/') throw new ApiConnectorException('Your EndPoint Url should not end with slash.');
-                $apiServer = new ApiServer($appkey, $appsecret, $url);
-            }
             self::$instance = new ApiConnector($apiServer);
         }
         return self::$instance;
