@@ -11,9 +11,7 @@ namespace Andersonef\ApiClientLayer\Services;
 
 use Andersonef\ApiClientLayer\Entities\Remote\ApiServer;
 use Andersonef\ApiClientLayer\Exceptions\ApiConnectorException;
-use Illuminate\Auth\Guard;
 use anlutro\cURL\cURL;
-use Illuminate\Support\Facades\Auth;
 
 class ApiConnector {
 
@@ -44,7 +42,7 @@ class ApiConnector {
         if($url{0} != '/') throw new ApiConnectorException('Your service url must begin with slash.');
         $response = null;
         $curl = new cURL();
-        $param = $this->generateToken($parameters, Auth::user());
+        $param = $this->generateToken($parameters);
         $param = ['__token' => $param];
         foreach($this->files as $file){
             $param[$file->getPostFilename()] = $file;
@@ -54,7 +52,8 @@ class ApiConnector {
         $url = $this->ApiServer->getEndpointUrl().$url;
         $request = $curl->newRequest($method, $url, $param);
         $request->setHeader('X-Requested-With', 'XMLHttpRequest');
-        $request->setHeader('language', \Config::get('app.locale'));
+        if(class_exists('Illuminate\Support\Facades\Config'))
+            $request->setHeader('language', \Illuminate\Support\Facades\Config::get('app.locale'));
 
         $request->setOption(CURLOPT_FOLLOWLOCATION, 1);
         if($method == 'GET' || $method == 'DELETE'){
@@ -107,7 +106,7 @@ class ApiConnector {
         return $trans;
     }
 
-    public function generateToken($payload, int $user = null)
+    public function generateToken($payload)
     {
         $header = ['AppKey' => $this->ApiServer->getAppKey()];
         if($this->usertoken) $header['UserKey'] = $this->usertoken;
