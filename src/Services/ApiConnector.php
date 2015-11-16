@@ -43,14 +43,14 @@ class ApiConnector {
         $response = null;
         $curl = new cURL();
         $param = $this->generateToken($parameters);
-        $param = ['__token' => $param];
+        $parameters['__token'] = $param;
         foreach($this->files as $file){
-            $param[$file->getPostFilename()] = $file;
+            $parameters[$file->getPostFilename()] = $file;
         }
 
         $return = null;
         $url = $this->ApiServer->getEndpointUrl().$url;
-        $request = $curl->newRequest($method, $url, $param);
+        $request = $curl->newRequest($method, $url, $parameters);
         $request->setHeader('X-Requested-With', 'XMLHttpRequest');
         if(class_exists('Illuminate\Support\Facades\Config'))
             $request->setHeader('language', \Illuminate\Support\Facades\Config::get('app.locale'));
@@ -61,7 +61,11 @@ class ApiConnector {
             $iurl = $curl->buildUrl($url, $parameters);
             $request->setUrl($iurl);
         }
-        $return = $request->send();
+        try {
+            $return = $request->send();
+        }catch(\Exception $err){
+            throw new \Exception('Falha ao conectar. Url completa: '.$iurl.' | token: '.$parameters['__token']);
+        }
         try {
             $ret = $this->translate($return->body);
             $ret->response = $return;
