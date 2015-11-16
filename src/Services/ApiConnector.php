@@ -42,8 +42,8 @@ class ApiConnector {
         if($url{0} != '/') throw new ApiConnectorException('Your service url must begin with slash.');
         $response = null;
         $curl = new cURL();
-        $param = $this->generateToken($parameters);
-        $parameters['__token'] = $param;
+        $token = $this->generateToken($parameters);
+        $parameters['__token'] = $token;
         foreach($this->files as $file){
             $parameters[$file->getPostFilename()] = $file;
         }
@@ -57,7 +57,7 @@ class ApiConnector {
 
         $request->setOption(CURLOPT_FOLLOWLOCATION, 1);
         if($method == 'GET' || $method == 'DELETE'){
-            $parameters['__token'] = $param['__token'];
+            $parameters['__token'] = $token;
             $iurl = $curl->buildUrl($url, $parameters);
             $request->setUrl($iurl);
         }
