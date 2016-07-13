@@ -137,6 +137,8 @@ class ApiConnector {
                         $return = $curl->rawPut($url, $novo);
                         break;
                 }
+            } else {
+                $return = $request->send();
             }
             //$return = $request->send();
         }catch(\Exception $err){
