@@ -37,6 +37,23 @@ class ApiConnector {
     }
 
 
+    private function http_build_query_for_curl( $arrays, &$new = array(), $prefix = null ) {
+
+        if ( is_object( $arrays ) ) {
+            $arrays = get_object_vars( $arrays );
+        }
+
+        foreach ( $arrays AS $key => $value ) {
+            $k = isset( $prefix ) ? $prefix . '[' . $key . ']' : $key;
+            if ( is_array( $value ) OR is_object( $value )  ) {
+                $this->http_build_query_for_curl( $value, $new, $k );
+            } else {
+                $new[$k] = $value;
+            }
+        }
+    }
+
+
     private function _request($url, $method = 'POST', $parameters = [])
     {
         if($url{0} != '/') throw new ApiConnectorException('Your service url must begin with slash.');
@@ -50,7 +67,49 @@ class ApiConnector {
 
         $return = null;
         $url = $this->ApiServer->getEndpointUrl().$url;
+
+        //$url = 'http://teste.local/index.php';
+        /*if(in_array($method, ['POST', 'PUT'])) {
+            $req = curl_init($url);
+            curl_setopt($req, CURLOPT_POST, 1);
+            curl_setopt($req, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($req, CURLOPT_URL, $url);
+            curl_setopt($req, CURLOPT_RETURNTRANSFER, 1);
+
+            if(count($this->files) > 0) {
+                //curl_setopt($req, CURLOPT_UPLOAD, 1);
+                //curl_setopt($req, CURLOPT_UPLOAD, 1);
+                //$request->setOption(CURLOPT_SAFE_UPLOAD, true);
+                curl_setopt($req, CURLOPT_HTTPHEADER, ['Content-type: multipart/form-data']);
+
+            }
+            //dd($url, $parameters);
+
+
+            curl_setopt($req, CURLOPT_POSTFIELDS, http_build_query($parameters));
+
+            $retorno = curl_exec($req);
+            dd('aki', $retorno, 'arquivo existe??', file_exists($this->files[0]->getFilename()), $this->files[0]->getFilename());
+            $retorno = $this->translate($retorno);
+            return $retorno;
+
+        }*/
+
+
+
+
+
+
+
+
+
+
         $request = $curl->newRequest($method, $url, $parameters);
+        /*if(count($this->files) > 0) {
+            $request->setOption(CURLOPT_UPLOAD, true);
+            $request->setOption(CURLOPT_SAFE_UPLOAD, true);
+        }*/
+
         $request->setHeader('X-Requested-With', 'XMLHttpRequest');
         if(class_exists('Illuminate\Support\Facades\Config'))
             $request->setHeader('language', \Illuminate\Support\Facades\Config::get('app.locale'));
@@ -62,9 +121,26 @@ class ApiConnector {
             $request->setUrl($iurl);
         }
         try {
-            $return = $request->send();
+            if(count($this->files) > 0) {
+                $novo = [];
+                $this->http_build_query_for_curl($parameters, $novo);
+                foreach($this->files as $file){
+                    $novo[$file->getPostFilename()] = $file;
+                }
+                $curl->setDefaultOptions([CURLOPT_HEADER => ['Content-type: multipart/form-data']]);
+
+                switch($method){
+                    case 'POST':
+                        $return = $curl->rawPost($url, $novo);
+                        break;
+                    case 'PUT':
+                        $return = $curl->rawPut($url, $novo);
+                        break;
+                }
+            }
+            //$return = $request->send();
         }catch(\Exception $err){
-            throw new \Exception('Falha ao conectar. Url completa: '.$iurl.' | token: '.$parameters['__token']);
+            throw new \Exception('Falha ao conectar. Url completa: '.$url.' | token: '.$parameters['__token'].' exception: '.$err->getMessage());
         }
         try {
             $ret = $this->translate($return->body);
@@ -105,7 +181,7 @@ class ApiConnector {
         try{
             $trans = \JWT::decode($token, $this->ApiServer->getAppSecret(), ['HS256', 'HS384', 'ES256', 'RS384']);
         }catch(\Exception $e){
-            throw new ApiConnectorException('Não foi possível decodificar a resposta ('.$e->getMessage().'). Resposta pura: '.$token);
+            throw new ApiConnectorException('Nï¿½o foi possï¿½vel decodificar a resposta ('.$e->getMessage().'). Resposta pura: '.$token);
         }
         return $trans;
     }
