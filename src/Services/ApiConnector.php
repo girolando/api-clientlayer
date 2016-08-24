@@ -134,6 +134,7 @@ class ApiConnector {
                         $return = $curl->rawPost($url, $novo);
                         break;
                     case 'PUT':
+                        $url = $curl->buildUrl($url, $novo); //Seria um problema do verbo put? Ter que passar parametros via get por não suportar uma payload assim como o POST....
                         $return = $curl->rawPut($url, $novo);
                         break;
                 }
