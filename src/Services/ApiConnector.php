@@ -104,7 +104,7 @@ class ApiConnector {
 
 
 
-        $request = $curl->newRequest($method, $url, $parameters);
+        $request = $curl->newRequest($method, $url, ($method == 'GET') ? [] : $parameters);
         /*if(count($this->files) > 0) {
             $request->setOption(CURLOPT_UPLOAD, true);
             $request->setOption(CURLOPT_SAFE_UPLOAD, true);
