@@ -1,5 +1,5 @@
 {
-  "name": "andersonef/api-clientlayer",
+  "name": "girolando/api-clientlayer",
   "description": "Laravel Api Implementation -  Client layer",
   "keywords": [
     "laravel",
@@ -21,12 +21,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Andersonef\\ApiClientLayer\\": "src/"
+      "Girolando\\ApiClientLayer\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Andersonef\\Tests\\ApiClientLayer\\": "tests/"
+      "Girolando\\Tests\\ApiClientLayer\\": "tests/"
     }
   },
   "extra": {
